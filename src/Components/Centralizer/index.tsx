@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import { Box } from './style';
 
-interface Props {
+interface ConteinerProps {
   children: ReactNode;
 }
 
-const ContainerCentralizer = ({ children }: Props) => {
+const ContainerCentralizer = ({ children }: ConteinerProps) => {
   return <Box>{children}</Box>;
 };
 

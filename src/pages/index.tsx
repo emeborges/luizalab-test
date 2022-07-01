@@ -1,10 +1,18 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import ContainerCentralizer from '../Components/Centralizer';
+import { BiSearch } from 'react-icons/bi';
+import { BsHeart } from 'react-icons/bs';
 
 import { Box } from '../styles/pages/home';
+import { useState } from 'react';
 
 const Home: NextPage = () => {
+  const [isToggled, setIsToggled] = useState(false);
+
+  console.log(isToggled);
+
   return (
     <Box>
       <Head>
@@ -13,7 +21,45 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ContainerCentralizer>
-        <p>Testando</p>
+        <div className="headingComponent">
+          <div className="logoContainer">
+            <Image src={'/img/marvel.png'} width={'200px'} height={'80px'} />
+            <p className="logoComent">Search heros</p>
+          </div>
+          <div className="callContainer">
+            <h2 className="call">EXPLORE O UNIVERSO</h2>
+            <p className="subCall">
+              Mergulho no domínio deslumbrante de todos os personagens clássicos
+              que você ama - e aqueles que você descobrira em breve!
+            </p>
+          </div>
+          <div className="inputContainer">
+            <BiSearch className="icon" />
+            <input type={'text'} />
+          </div>
+        </div>
+        <div className="containerHeros">
+          <div className="resultsHeros">
+            <p>Encontrados {20} heróis</p>
+          </div>
+          <div className="filterContainer">
+            <div className="inputClass">
+              <p>Ordenar por - A/Z</p>
+
+              <label className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={isToggled}
+                  onChange={() => setIsToggled(!isToggled)}
+                />
+                <span className="switch" />
+              </label>
+            </div>
+            <div className="favs">
+              <BsHeart />
+            </div>
+          </div>
+        </div>
       </ContainerCentralizer>
     </Box>
   );
