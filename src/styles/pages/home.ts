@@ -77,17 +77,20 @@ export const Box = styled.div`
     }
   }
 
-  .containerHeros {
+  .containerHeroes {
     margin: 5rem 0 0;
-    display: flex;
-    justify-content: space-between;
     width: 100%;
 
-    .resultsHeros {
+    .filtersContainer {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .amountHeroes {
       color: ${props => props.theme.colors.textGrey};
     }
 
-    .filterContainer {
+    .filters {
       width: 30%;
       display: flex;
       justify-content: space-between;
@@ -165,6 +168,13 @@ export const Box = styled.div`
           color: ${props => props.theme.colors.redMarvel};
         }
       }
+    }
+
+    .conteinerResults {
+      margin: 2rem 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
     }
   }
 `;

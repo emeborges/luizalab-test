@@ -12,7 +12,14 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-interface CharacterProps {}
+interface CharacterProps {
+  name: string;
+  id: number;
+  thumbnail: {
+    extension: string;
+    path: string;
+  };
+}
 
 interface ContextProps {
   characters: CharacterProps[];
@@ -28,11 +35,20 @@ export function CharacterProvider({ children }: ProviderProps) {
 
   useEffect(() => {
     setLoad(true);
-    async function getBosses() {
+    async function getCharacters() {
       const { data } = await api.get(`/characters`);
       setCharacters(data.data.results);
       setLoad(false);
     }
+
+    async function getBosses() {
+      const { data } = await api.get(
+        'http://gateway.marvel.com/v1/public/characters/1009149/comics'
+      );
+      console.log('dadadada', data);
+    }
+
+    getCharacters();
     getBosses();
   }, [pid]);
 

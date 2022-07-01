@@ -1,16 +1,32 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import ContainerCentralizer from '../Components/Centralizer';
 import { BiSearch } from 'react-icons/bi';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import { useEffect, useState } from 'react';
 
+import ContainerCentralizer from '../Components/Centralizer';
 import { Box } from '../styles/pages/home';
-import { useState } from 'react';
+import BoxHero from '../Components/BoxHero';
+import { api } from '../utils/services';
+import { CharacterProps } from '../utils/types';
 
 const Home: NextPage = () => {
   const [isToggled, setIsToggled] = useState(false);
   const [favorite, setFavorite] = useState(false);
+  const [characters, setCharacters] = useState<CharacterProps[]>([]);
+  const [load, setLoad] = useState(true);
+
+  useEffect(() => {
+    setLoad(true);
+    async function getCharacters() {
+      const { data } = await api.get(`/characters`);
+      setCharacters(data.data.results);
+      setLoad(false);
+    }
+
+    getCharacters();
+  }, []);
 
   return (
     <Box>
@@ -37,29 +53,36 @@ const Home: NextPage = () => {
             <input type={'text'} />
           </div>
         </div>
-        <div className="containerHeros">
-          <div className="resultsHeros">
-            <p>Encontrados {20} heróis</p>
-          </div>
-          <div className="filterContainer">
-            <div className="inputClass">
-              <p>Ordenar por - A/Z</p>
-
-              <label className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={isToggled}
-                  onChange={() => setIsToggled(!isToggled)}
-                />
-                <span className="switch" />
-              </label>
+        <div className="containerHeroes">
+          <div className="filtersContainer">
+            <div className="amountHeroes">
+              <p>Encontrados {20} heróis</p>
             </div>
-            <button className="favs" onClick={() => setFavorite(!favorite)}>
-              <div className="icons">
-                {favorite == true ? <BsHeartFill /> : <BsHeart />}
+            <div className="filters">
+              <div className="inputClass">
+                <p>Ordenar por - A/Z</p>
+
+                <label className="toggle-switch">
+                  <input
+                    type="checkbox"
+                    checked={isToggled}
+                    onChange={() => setIsToggled(!isToggled)}
+                  />
+                  <span className="switch" />
+                </label>
               </div>
-              <p>Somente favoritos</p>
-            </button>
+              <button className="favs" onClick={() => setFavorite(!favorite)}>
+                <div className="icons">
+                  {favorite == true ? <BsHeartFill /> : <BsHeart />}
+                </div>
+                <p>Somente favoritos</p>
+              </button>
+            </div>
+          </div>
+          <div className="conteinerResults">
+            {characters.map(hero => (
+              <BoxHero heroe={hero} />
+            ))}
           </div>
         </div>
       </ContainerCentralizer>
