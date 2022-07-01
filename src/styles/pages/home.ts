@@ -83,6 +83,10 @@ export const Box = styled.div`
     justify-content: space-between;
     width: 100%;
 
+    .resultsHeros {
+      color: ${props => props.theme.colors.textGrey};
+    }
+
     .filterContainer {
       width: 30%;
       display: flex;
@@ -92,6 +96,10 @@ export const Box = styled.div`
       .inputClass {
         display: flex;
         align-items: center;
+
+        p {
+          margin: 0 1rem 0 0;
+        }
 
         .toggle-switch {
           position: relative;
@@ -140,6 +148,21 @@ export const Box = styled.div`
               transition: transform 0.3s ease;
             }
           }
+        }
+      }
+
+      .favs {
+        background: none;
+        display: flex;
+        border: none;
+        align-items: center;
+        color: ${props => props.theme.colors.textRed};
+        font-size: 1rem;
+
+        .icons {
+          font-size: 1.1rem;
+          margin: 0 0.5rem 0 0;
+          color: ${props => props.theme.colors.redMarvel};
         }
       }
     }

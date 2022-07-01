@@ -3,15 +3,14 @@ import Head from 'next/head';
 import Image from 'next/image';
 import ContainerCentralizer from '../Components/Centralizer';
 import { BiSearch } from 'react-icons/bi';
-import { BsHeart } from 'react-icons/bs';
+import { BsHeart, BsHeartFill } from 'react-icons/bs';
 
 import { Box } from '../styles/pages/home';
 import { useState } from 'react';
 
 const Home: NextPage = () => {
   const [isToggled, setIsToggled] = useState(false);
-
-  console.log(isToggled);
+  const [favorite, setFavorite] = useState(false);
 
   return (
     <Box>
@@ -55,9 +54,12 @@ const Home: NextPage = () => {
                 <span className="switch" />
               </label>
             </div>
-            <div className="favs">
-              <BsHeart />
-            </div>
+            <button className="favs" onClick={() => setFavorite(!favorite)}>
+              <div className="icons">
+                {favorite == true ? <BsHeartFill /> : <BsHeart />}
+              </div>
+              <p>Somente favoritos</p>
+            </button>
           </div>
         </div>
       </ContainerCentralizer>

@@ -4,14 +4,17 @@ import GlobalStyle from '../styles/globals';
 import { ThemeProvider } from 'styled-components';
 import theme from '../styles/theme';
 import FontStyles from '../styles/fontStyle';
+import { CharacterProvider } from '../hooks/useCharacter';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <FontStyles />
-      <Component {...pageProps} />
-      <GlobalStyle />
-    </ThemeProvider>
+    <CharacterProvider>
+      <ThemeProvider theme={theme}>
+        <FontStyles />
+        <Component {...pageProps} />
+        <GlobalStyle />
+      </ThemeProvider>
+    </CharacterProvider>
   );
 }
 
