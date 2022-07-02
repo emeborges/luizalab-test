@@ -9,6 +9,10 @@ export const Box = styled.div`
     align-items: center;
     flex-direction: column;
 
+    @media (max-width: 600px) {
+      margin: 1rem 0.5rem 0;
+    }
+
     .logoContainer {
       display: flex;
       color: ${props => props.theme.colors.text};
@@ -85,6 +89,13 @@ export const Box = styled.div`
       display: flex;
       justify-content: space-between;
       width: 100%;
+
+      @media (max-width: 600px) {
+        margin: 1rem 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
     }
     .amountHeroes {
       color: ${props => props.theme.colors.textGrey};
@@ -95,6 +106,14 @@ export const Box = styled.div`
       display: flex;
       justify-content: space-between;
       color: ${props => props.theme.colors.textRed};
+
+      @media (max-width: 600px) {
+        margin: 0.5rem 0;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+      }
 
       .inputClass {
         display: flex;
@@ -161,6 +180,11 @@ export const Box = styled.div`
         align-items: center;
         color: ${props => props.theme.colors.textRed};
         font-size: 1rem;
+        cursor: pointer;
+
+        @media (max-width: 600px) {
+          margin: 1rem 0 0;
+        }
 
         .icons {
           font-size: 1.1rem;
@@ -175,6 +199,10 @@ export const Box = styled.div`
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+
+      @media (max-width: 600px) {
+        justify-content: center;
+      }
     }
 
     .controllerPage {

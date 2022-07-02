@@ -21,6 +21,7 @@ const Home: NextPage = () => {
   const [refresh, setRefresh] = useState(true);
   const [heroesPerPage, setHeroesPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(0);
+  const [search, setSearch] = useState('');
 
   const pages = Math.ceil(heroes.length / heroesPerPage) - 1;
   const startIndex = currentPage * heroesPerPage;
@@ -48,7 +49,7 @@ const Home: NextPage = () => {
     if (isToggled == false) {
       setHeroes(heroes.sort((a, b) => a.name.localeCompare(b.name)));
     } else {
-      setHeroes(heroes.sort((a, b) => b.name.localeCompare(a.name)));
+      setRefresh(!refresh);
     }
     setIsToggled(!isToggled);
     setInterval(() => setLoad(false), 1000);
@@ -82,6 +83,10 @@ const Home: NextPage = () => {
     }
   }
 
+  const searchResult = heroes.filter(heroe =>
+    heroe.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
+
   return (
     <Box>
       <Head>
@@ -104,14 +109,18 @@ const Home: NextPage = () => {
           </div>
           <div className="inputContainer">
             <BiSearch className="icon" />
-            <input type={'text'} />
+            <input
+              type={'text'}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
         </div>
         <div className="containerHeroes">
           <div className="filtersContainer">
             <div className="amountHeroes">
               <p>
-                Você está vendo {} Encontrados {heroes.length} heróis
+                {} Encontrados {heroes.length} heróis
               </p>
             </div>
             <div className="filters">
@@ -140,12 +149,19 @@ const Home: NextPage = () => {
           ) : (
             <>
               <div className="conteinerResults">
-                {currentHeroes.map((hero, key) => (
-                  <BoxHero
-                    heroe={hero}
-                    favoriteStatus={checkFavorite(hero.id)}
-                  />
-                ))}
+                {search == ''
+                  ? currentHeroes.map((hero, key) => (
+                      <BoxHero
+                        heroe={hero}
+                        favoriteStatus={checkFavorite(hero.id)}
+                      />
+                    ))
+                  : searchResult.map((hero, key) => (
+                      <BoxHero
+                        heroe={hero}
+                        favoriteStatus={checkFavorite(hero.id)}
+                      />
+                    ))}
               </div>
 
               <div className="controllerPage">
