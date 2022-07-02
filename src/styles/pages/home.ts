@@ -176,5 +176,33 @@ export const Box = styled.div`
       flex-wrap: wrap;
       justify-content: space-between;
     }
+
+    .controllerPage {
+      display: flex;
+      width: 100%;
+      justify-content: right;
+      align-items: center;
+      color: ${props => props.theme.colors.redMarvel};
+
+      button {
+        background: transparent;
+        margin: 0 1rem 0 0;
+        border: none;
+        padding: 1rem;
+        border-radius: 100%;
+        font-size: 24px;
+        font-weight: 700;
+        cursor: pointer;
+        color: ${props => props.theme.colors.redMarvel};
+      }
+
+      p {
+        margin: 0 1rem 0 0;
+      }
+
+      #maxPag {
+        font-size: 80%;
+      }
+    }
   }
 `;

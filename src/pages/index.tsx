@@ -10,23 +10,77 @@ import { Box } from '../styles/pages/home';
 import BoxHero from '../Components/BoxHero';
 import { api } from '../utils/services';
 import { CharacterProps } from '../utils/types';
+import LoadingComponent from '../Components/Loading';
 
 const Home: NextPage = () => {
   const [isToggled, setIsToggled] = useState(false);
-  const [favorite, setFavorite] = useState(false);
-  const [characters, setCharacters] = useState<CharacterProps[]>([]);
+  const [favoriteFilter, setFavoriteFilter] = useState(false);
+  const [heroes, setHeroes] = useState<CharacterProps[]>([]);
+  const [favoritesHeroes, setFavoritesHeroes] = useState<number[]>([]);
   const [load, setLoad] = useState(true);
+  const [refresh, setRefresh] = useState(true);
+  const [heroesPerPage, setHeroesPerPage] = useState(20);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const pages = Math.ceil(heroes.length / heroesPerPage) - 1;
+  const startIndex = currentPage * heroesPerPage;
+  const endIndex = startIndex + heroesPerPage;
+  const currentHeroes = heroes.slice(startIndex, endIndex);
 
   useEffect(() => {
-    setLoad(true);
     async function getCharacters() {
       const { data } = await api.get(`/characters`);
-      setCharacters(data.data.results);
-      setLoad(false);
+      const results = data.data.results;
+      setHeroes(results);
     }
+    const storage: number[] =
+      sessionStorage.getItem('HEROE_FAV') == null
+        ? ''
+        : JSON.parse(sessionStorage.getItem('HEROE_FAV')!);
 
+    setFavoritesHeroes(storage);
     getCharacters();
-  }, []);
+    setLoad(false);
+  }, [refresh]);
+
+  function filterAlphabetical() {
+    setLoad(true);
+    if (isToggled == false) {
+      setHeroes(heroes.sort((a, b) => a.name.localeCompare(b.name)));
+    } else {
+      setHeroes(heroes.sort((a, b) => b.name.localeCompare(a.name)));
+    }
+    setIsToggled(!isToggled);
+    setInterval(() => setLoad(false), 1000);
+  }
+
+  function checkFavorite(id: number) {
+    if (favoritesHeroes != null) {
+      const check = favoritesHeroes.includes(id);
+      if (check == true) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  function filterFavorite() {
+    const storage: number[] =
+      sessionStorage.getItem('HEROE_FAV') == null
+        ? ''
+        : JSON.parse(sessionStorage.getItem('HEROE_FAV')!);
+
+    setFavoritesHeroes(storage);
+    setFavoriteFilter(!favoriteFilter);
+    setLoad(true);
+    if (favoriteFilter === false) {
+      setHeroes(heroes.filter(heroe => storage.includes(heroe.id)));
+      setInterval(() => setLoad(false), 3000);
+    } else {
+      setRefresh(!refresh);
+    }
+  }
 
   return (
     <Box>
@@ -56,7 +110,9 @@ const Home: NextPage = () => {
         <div className="containerHeroes">
           <div className="filtersContainer">
             <div className="amountHeroes">
-              <p>Encontrados {20} heróis</p>
+              <p>
+                Você está vendo {} Encontrados {heroes.length} heróis
+              </p>
             </div>
             <div className="filters">
               <div className="inputClass">
@@ -66,24 +122,54 @@ const Home: NextPage = () => {
                   <input
                     type="checkbox"
                     checked={isToggled}
-                    onChange={() => setIsToggled(!isToggled)}
+                    onChange={() => filterAlphabetical()}
                   />
                   <span className="switch" />
                 </label>
               </div>
-              <button className="favs" onClick={() => setFavorite(!favorite)}>
+              <button className="favs" onClick={() => filterFavorite()}>
                 <div className="icons">
-                  {favorite == true ? <BsHeartFill /> : <BsHeart />}
+                  {favoriteFilter == true ? <BsHeartFill /> : <BsHeart />}
                 </div>
                 <p>Somente favoritos</p>
               </button>
             </div>
           </div>
-          <div className="conteinerResults">
-            {characters.map(hero => (
-              <BoxHero heroe={hero} />
-            ))}
-          </div>
+          {load == true ? (
+            <LoadingComponent />
+          ) : (
+            <>
+              <div className="conteinerResults">
+                {currentHeroes.map((hero, key) => (
+                  <BoxHero
+                    heroe={hero}
+                    favoriteStatus={checkFavorite(hero.id)}
+                  />
+                ))}
+              </div>
+
+              <div className="controllerPage">
+                <button
+                  onClick={() =>
+                    setCurrentPage(currentPage == 0 ? 0 : currentPage - 1)
+                  }
+                >
+                  -
+                </button>
+                <p>{currentPage + 1}</p>
+                <button
+                  onClick={() =>
+                    setCurrentPage(
+                      currentPage == pages ? pages : currentPage + 1
+                    )
+                  }
+                >
+                  +
+                </button>
+                <p id="maxPag">de {pages + 1} páginas.</p>
+              </div>
+            </>
+          )}
         </div>
       </ContainerCentralizer>
     </Box>
