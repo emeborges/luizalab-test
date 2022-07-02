@@ -5,4 +5,15 @@ export interface CharacterProps {
     extension: string;
     path: string;
   };
+  description?: string;
+  modified?: string;
+  comics?: {
+    available: number;
+  };
+  series?: {
+    available: number;
+  };
+  stories?: {
+    available: number;
+  };
 }

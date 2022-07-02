@@ -4,6 +4,7 @@ export const Box = styled.div`
   max-width: 300px;
   width: 100%;
   margin: 1.5rem 0;
+  cursor: pointer;
 
   .heroDetails {
     margin: 1rem 0 0;

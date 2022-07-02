@@ -14,8 +14,6 @@ export const api = axios.create({
   params: {
     ts: time,
     apikey: publickey,
-    hash: hash,
-    limit: 100,
-    orderBy: 'modified'
+    hash: hash
   }
 });

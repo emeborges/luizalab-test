@@ -30,14 +30,14 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     async function getCharacters() {
-      const { data } = await api.get(`/characters`);
+      const { data } = await api.get(`/characters?orderBy=modified&limit=100`);
       const results = data.data.results;
       setHeroes(results);
     }
     const storage: number[] =
-      sessionStorage.getItem('HEROE_FAV') == null
+      localStorage.getItem('HEROE_FAV') == null
         ? ''
-        : JSON.parse(sessionStorage.getItem('HEROE_FAV')!);
+        : JSON.parse(localStorage.getItem('HEROE_FAV')!);
 
     setFavoritesHeroes(storage);
     getCharacters();
@@ -68,9 +68,9 @@ const Home: NextPage = () => {
 
   function filterFavorite() {
     const storage: number[] =
-      sessionStorage.getItem('HEROE_FAV') == null
+      localStorage.getItem('HEROE_FAV') == null
         ? ''
-        : JSON.parse(sessionStorage.getItem('HEROE_FAV')!);
+        : JSON.parse(localStorage.getItem('HEROE_FAV')!);
 
     setFavoritesHeroes(storage);
     setFavoriteFilter(!favoriteFilter);
@@ -119,9 +119,7 @@ const Home: NextPage = () => {
         <div className="containerHeroes">
           <div className="filtersContainer">
             <div className="amountHeroes">
-              <p>
-                {} Encontrados {heroes.length} heróis
-              </p>
+              <p>Encontramos {heroes.length} heróis</p>
             </div>
             <div className="filters">
               <div className="inputClass">
@@ -188,6 +186,7 @@ const Home: NextPage = () => {
           )}
         </div>
       </ContainerCentralizer>
+      <div className="footer" />
     </Box>
   );
 };

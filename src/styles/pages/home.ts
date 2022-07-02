@@ -82,7 +82,7 @@ export const Box = styled.div`
   }
 
   .containerHeroes {
-    margin: 5rem 0 0;
+    margin: 5rem 0 2rem;
     width: 100%;
 
     .filtersContainer {
@@ -232,5 +232,11 @@ export const Box = styled.div`
         font-size: 80%;
       }
     }
+  }
+
+  .footer {
+    width: 100%;
+    height: 3rem;
+    background: ${props => props.theme.colors.redMarvel};
   }
 `;
