@@ -1,8 +1,8 @@
 import { CharacterProps } from '../../utils/types';
 import { Box } from './style';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import { useState } from 'react';
+
 import Link from 'next/link';
 
 interface Props {

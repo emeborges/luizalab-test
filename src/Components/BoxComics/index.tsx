@@ -2,8 +2,6 @@ import { ComicProps } from '../../utils/types';
 import { Box } from './style';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
-import Link from 'next/link';
 
 interface Props {
   details: ComicProps;
@@ -21,9 +19,7 @@ const BoxComics = ({ details }: Props) => {
         ? null
         : JSON.parse(localStorage.getItem(`COMICS_${heroeSelected}`)!);
 
-    if (favoritesComics == null) {
-      console.log('deu certooooo');
-    } else {
+    if (favoritesComics != null) {
       favoritesComics.includes(details.id)
         ? setFavorite(true)
         : setFavorite(false);

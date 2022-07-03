@@ -10,6 +10,11 @@ export const Box = styled.div`
     display: flex;
     align-items: center;
 
+    @media (max-width: 900px) {
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .logoContainer {
       display: flex;
       color: ${props => props.theme.colors.text};
@@ -23,11 +28,16 @@ export const Box = styled.div`
         font-size: 16px;
       }
     }
+
     .inputContainer {
       position: relative;
       width: 100%;
       max-width: 500px;
       margin: 0 6.25rem;
+
+      @media (max-width: 900px) {
+        margin: 1rem 0;
+      }
 
       .icon {
         position: absolute;
@@ -42,8 +52,8 @@ export const Box = styled.div`
       }
 
       input {
-        width: 100%;
         border: none;
+        width: 100%;
         background: ${props => props.theme.colors.backgroundBase};
         padding: 0.6rem 3rem;
         font-size: 1rem;
@@ -54,10 +64,55 @@ export const Box = styled.div`
         &:focus {
           box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
           outline: 0;
+          border-radius: 8px 8px 0 0;
+        }
+      }
+
+      .searchResults {
+        position: absolute;
+        box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+        z-index: 9;
+        transition: all 0.3s;
+        border-radius: 0 0 8px 8px;
+        top: 2;
+        width: 100%;
+        height: 20rem;
+        background: ${props => props.theme.colors.backgroundBase};
+        overflow-y: scroll;
+        scrollbar-width: auto;
+        scrollbar-color: #8f54a0 #ffffff;
+
+        ::-webkit-scrollbar-thumb {
+          background-color: ${props => props.theme.colors.textGrey};
+          border-radius: 10px;
+          border: 3px solid #ffffff;
+        }
+        ::-webkit-scrollbar-track {
+          background: #ffffff;
+        }
+        ::-webkit-scrollbar {
+          width: 16px;
         }
 
-        &:hover {
-          box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+        p {
+          text-align: center;
+          color: ${props => props.theme.colors.textDarkGrey};
+        }
+        .results {
+          font-size: 0.8rem;
+          cursor: pointer;
+
+          p {
+            padding: 1rem 0;
+
+            :nth-child(odd) {
+              background: ${props => props.theme.colors.backgroundSec};
+            }
+
+            &:hover {
+              font-weight: 700;
+            }
+          }
         }
       }
     }
@@ -69,11 +124,19 @@ export const Box = styled.div`
     justify-content: space-between;
     color: ${props => props.theme.colors.textDarkGrey};
 
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
+
     .heroDetail {
       display: flex;
       width: 30%;
       justify-content: center;
       flex-direction: column;
+
+      @media (max-width: 600px) {
+        width: 100%;
+      }
 
       .title {
         display: flex;
@@ -125,6 +188,9 @@ export const Box = styled.div`
       width: 70%;
       display: flex;
       justify-content: center;
+      @media (max-width: 600px) {
+        width: 100%;
+      }
     }
   }
 `;

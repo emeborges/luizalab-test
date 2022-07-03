@@ -1,9 +1,6 @@
 import { ComicProps } from '../../utils/types';
 import { Box } from './style';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
-import Link from 'next/link';
 import { api } from '../../utils/services';
 import BoxComics from '../BoxComics';
 

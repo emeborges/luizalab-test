@@ -1,8 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { BiSearch } from 'react-icons/bi';
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 
 import ContainerCentralizer from '../Components/Centralizer';
@@ -52,7 +50,7 @@ const Home: NextPage = () => {
       setRefresh(!refresh);
     }
     setIsToggled(!isToggled);
-    setInterval(() => setLoad(false), 1000);
+    setTimeout(() => setLoad(false), 1000);
   }
 
   function checkFavorite(id: number) {
@@ -77,7 +75,7 @@ const Home: NextPage = () => {
     setLoad(true);
     if (favoriteFilter === false) {
       setHeroes(heroes.filter(heroe => storage.includes(heroe.id)));
-      setInterval(() => setLoad(false), 3000);
+      setTimeout(() => setLoad(false), 3000);
     } else {
       setRefresh(!refresh);
     }
@@ -107,7 +105,14 @@ const Home: NextPage = () => {
             </p>
           </div>
           <div className="inputContainer">
-            <BiSearch className="icon" />
+            <div className="icon">
+              <Image
+                src={'/img/ic_busca.svg'}
+                width={'24px'}
+                height={'24px'}
+                className="icon"
+              />
+            </div>
             <input
               type={'text'}
               value={search}

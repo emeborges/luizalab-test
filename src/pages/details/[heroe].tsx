@@ -3,8 +3,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { BiSearch, BiBook } from 'react-icons/bi';
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
 
 import Link from 'next/link';
 
@@ -12,8 +10,8 @@ import ContainerCentralizer from '../../Components/Centralizer';
 import { Box } from '../../styles/pages/details';
 import { api } from '../../utils/services';
 import { CharacterProps } from '../../utils/types';
-import BoxComics from '../../Components/BoxComics';
 import Releases from '../../Components/Realeases';
+import LoadingComponent from '../../Components/Loading';
 
 const Details: NextPage = () => {
   const route = useRouter();
@@ -22,14 +20,28 @@ const Details: NextPage = () => {
   const [load, setLoad] = useState(true);
   const [favoritesHeroes, setFavoritesHeroes] = useState<number[]>([]);
   const [heroeDetails, setHeroeDetails] = useState<CharacterProps>();
-  const [statusFavoriteHero, setStatusFavoriteHero] = useState(true);
+  const [statusFavoriteHero, setStatusFavoriteHero] = useState(false);
+  const [heroes, setHeroes] = useState<CharacterProps[]>([]);
 
   useEffect(() => {
     const selectedHeroe = localStorage.getItem('HEROE_SELECTED');
 
-    async function getCharacters() {
+    async function getHeroeDetails() {
       const { data } = await api.get(`/characters/${selectedHeroe}`);
       setHeroeDetails(data.data.results[0]);
+    }
+
+    async function getCharacters() {
+      const { data } = await api.get(`/characters?orderBy=modified&limit=100`);
+      const results = data.data.results;
+      setHeroes(results);
+    }
+
+    function checkFavorite() {
+      if (favoritesHeroes != null) {
+        const check = favoritesHeroes.includes(Number(selectedHeroe));
+        return setStatusFavoriteHero(check);
+      }
     }
 
     const storage: number[] =
@@ -38,11 +50,13 @@ const Details: NextPage = () => {
         : JSON.parse(localStorage.getItem('HEROE_FAV')!);
 
     setFavoritesHeroes(storage);
+    getHeroeDetails();
     getCharacters();
-    setLoad(false);
+    checkFavorite();
+    setTimeout(() => setLoad(false), 2000);
   }, [pid]);
 
-  function favoriteHeroeVerification() {
+  function favoriteHeroeVerificationAndAddorRemove() {
     const heroesStorage: number[] =
       localStorage.getItem('HEROE_FAV') == null
         ? ''
@@ -63,6 +77,17 @@ const Details: NextPage = () => {
     }
   }
 
+  const searchResult = heroes.filter(heroe =>
+    heroe.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
+
+  function redirectHeroe(heroId: number) {
+    setLoad(true);
+    localStorage.setItem('HEROE_SELECTED', JSON.stringify(heroId));
+    route.push(`/details/${heroId}`);
+    setTimeout(() => setLoad(false), 2000);
+  }
+
   return (
     <Box>
       <Head>
@@ -81,23 +106,38 @@ const Details: NextPage = () => {
               />
             </div>
           </Link>
-          <div className="inputContainer">
-            <div className="icon">
-              <Image
-                src={'/img/ic_busca_menor.svg'}
-                width={'16px'}
-                height={'16px'}
-                className="icon"
+          <div>
+            <div className="inputContainer">
+              <div className="icon">
+                <Image
+                  src={'/img/ic_busca_menor.svg'}
+                  width={'16px'}
+                  height={'16px'}
+                  className="icon"
+                />
+              </div>
+              <input
+                type={'text'}
+                value={search}
+                onChange={e => setSearch(e.target.value)}
               />
+              {search != '' ? (
+                <div className="searchResults">
+                  <p>Resultados:</p>
+
+                  <div className="results">
+                    {searchResult.map((hero, key) => (
+                      <p onClick={() => redirectHeroe(hero.id)}>{hero.name}</p>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
-            <input
-              type={'text'}
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
           </div>
         </div>
-        {load == true ? null : (
+        {load == true ? (
+          <LoadingComponent />
+        ) : (
           <>
             <div className="details">
               <div className="heroDetail">
@@ -106,7 +146,7 @@ const Details: NextPage = () => {
                   <div
                     className="icons"
                     onClick={() => {
-                      favoriteHeroeVerification();
+                      favoriteHeroeVerificationAndAddorRemove();
                       setStatusFavoriteHero(!statusFavoriteHero);
                     }}
                   >
@@ -158,12 +198,14 @@ const Details: NextPage = () => {
                 </div>
               </div>
               <div className="picture">
-                <Image
-                  src={`${heroeDetails?.thumbnail.path}.${heroeDetails?.thumbnail.extension}`}
-                  width={500}
-                  height={500}
-                  style={{ borderBottom: '5px solid red' }}
-                />
+                {heroeDetails && (
+                  <Image
+                    src={`${heroeDetails?.thumbnail.path}.${heroeDetails?.thumbnail.extension}`}
+                    width={500}
+                    height={500}
+                    style={{ borderBottom: '5px solid red' }}
+                  />
+                )}
               </div>
             </div>
             <Releases url={heroeDetails?.comics?.collectionURI} />
