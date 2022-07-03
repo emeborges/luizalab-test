@@ -4,7 +4,10 @@ export const Box = styled.div`
   max-width: 300px;
   width: 100%;
   margin: 1.5rem 0;
-  cursor: pointer;
+
+  .imageBox {
+    cursor: pointer;
+  }
 
   .heroDetails {
     margin: 1rem 0 0;
@@ -14,6 +17,7 @@ export const Box = styled.div`
 
     p {
       color: ${props => props.theme.colors.textDarkGrey};
+      cursor: pointer;
     }
     .icons {
       color: ${props => props.theme.colors.textRed};

@@ -97,8 +97,7 @@ const Home: NextPage = () => {
       <ContainerCentralizer>
         <div className="headingComponent">
           <div className="logoContainer">
-            <Image src={'/img/marvel.png'} width={'200px'} height={'80px'} />
-            <p className="logoComent">Search heros</p>
+            <Image src={'/img/logo.svg'} width={'400px'} height={'100px'} />
           </div>
           <div className="callContainer">
             <h2 className="call">EXPLORE O UNIVERSO</h2>
@@ -136,7 +135,19 @@ const Home: NextPage = () => {
               </div>
               <button className="favs" onClick={() => filterFavorite()}>
                 <div className="icons">
-                  {favoriteFilter == true ? <BsHeartFill /> : <BsHeart />}
+                  {favoriteFilter == true ? (
+                    <Image
+                      src={'/img/favorito_01.svg'}
+                      height="15px"
+                      width={'15px'}
+                    />
+                  ) : (
+                    <Image
+                      src={'/img/favorito_02.svg'}
+                      height="15px"
+                      width={'15px'}
+                    />
+                  )}
                 </div>
                 <p>Somente favoritos</p>
               </button>

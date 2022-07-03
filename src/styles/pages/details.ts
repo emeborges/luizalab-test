@@ -15,6 +15,7 @@ export const Box = styled.div`
       color: ${props => props.theme.colors.text};
       font-weight: 700;
       align-items: center;
+      cursor: pointer;
       font-size: 0.8rem;
 
       .logoComent {
@@ -25,12 +26,12 @@ export const Box = styled.div`
     .inputContainer {
       position: relative;
       width: 100%;
-      max-width: 700px;
+      max-width: 500px;
       margin: 0 6.25rem;
 
       .icon {
         position: absolute;
-        top: 13px;
+        top: 0px;
         left: 20px;
         z-index: 10;
         border: none;
@@ -44,7 +45,7 @@ export const Box = styled.div`
         width: 100%;
         border: none;
         background: ${props => props.theme.colors.backgroundBase};
-        padding: 1.2rem 4rem;
+        padding: 0.6rem 3rem;
         font-size: 1rem;
         border-radius: 35px;
         color: ${props => props.theme.colors.textSecundary};
@@ -93,6 +94,7 @@ export const Box = styled.div`
       }
 
       .description {
+        margin: 1rem 0 0;
         color: ${props => props.theme.colors.textGrey};
         min-height: 40%;
       }
@@ -103,10 +105,12 @@ export const Box = styled.div`
         width: 100%;
         justify-content: space-around;
 
-        .comics {
+        .type {
+          text-align: center;
           .numbers {
             display: flex;
             font-size: 24px;
+            align-items: center;
 
             .icon {
               margin: 0 1rem 0 0;

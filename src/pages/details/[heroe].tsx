@@ -5,29 +5,33 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { BiSearch, BiBook } from 'react-icons/bi';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
-import { ImFilm } from 'react-icons/im';
-import { SiBookstack } from 'react-icons/si';
+
+import Link from 'next/link';
 
 import ContainerCentralizer from '../../Components/Centralizer';
 import { Box } from '../../styles/pages/details';
 import { api } from '../../utils/services';
 import { CharacterProps } from '../../utils/types';
+import BoxComics from '../../Components/BoxComics';
+import Releases from '../../Components/Realeases';
 
 const Details: NextPage = () => {
   const route = useRouter();
   const pid: any = route.query.heroe;
   const [search, setSearch] = useState('');
-
   const [load, setLoad] = useState(true);
   const [favoritesHeroes, setFavoritesHeroes] = useState<number[]>([]);
   const [heroeDetails, setHeroeDetails] = useState<CharacterProps>();
   const [statusFavoriteHero, setStatusFavoriteHero] = useState(true);
 
   useEffect(() => {
+    const selectedHeroe = localStorage.getItem('HEROE_SELECTED');
+
     async function getCharacters() {
-      const { data } = await api.get(`/characters/${pid}`);
+      const { data } = await api.get(`/characters/${selectedHeroe}`);
       setHeroeDetails(data.data.results[0]);
     }
+
     const storage: number[] =
       localStorage.getItem('HEROE_FAV') == null
         ? ''
@@ -68,12 +72,24 @@ const Details: NextPage = () => {
       </Head>
       <ContainerCentralizer>
         <div className="header">
-          <div className="logoContainer">
-            <Image src={'/img/marvel.png'} width={'110px'} height={'42px'} />
-            <p className="logoComent">Search heros</p>
-          </div>
+          <Link href={'/'}>
+            <div className="logoContainer">
+              <Image
+                src={'/img/logo_menor.svg'}
+                width={'250px'}
+                height={'50px'}
+              />
+            </div>
+          </Link>
           <div className="inputContainer">
-            <BiSearch className="icon" />
+            <div className="icon">
+              <Image
+                src={'/img/ic_busca_menor.svg'}
+                width={'16px'}
+                height={'16px'}
+                className="icon"
+              />
+            </div>
             <input
               type={'text'}
               value={search}
@@ -81,54 +97,78 @@ const Details: NextPage = () => {
             />
           </div>
         </div>
-        <div className="details">
-          <div className="heroDetail">
-            <div className="title">
-              <h2>{heroeDetails?.name.toLocaleUpperCase()}</h2>
-              <div
-                className="icons"
-                onClick={() => {
-                  favoriteHeroeVerification();
-                  setStatusFavoriteHero(!statusFavoriteHero);
-                }}
-              >
-                {statusFavoriteHero == true ? <BsHeartFill /> : <BsHeart />}
-              </div>
-            </div>
-            <div className="description">
-              <p>{heroeDetails?.description}</p>
-            </div>
-            <div className="stats">
-              <div className="comics">
-                <h4>Quadrinhos</h4>
-                <div className="numbers">
-                  <SiBookstack className="icon" />
-                  <p> {heroeDetails?.comics?.available}</p>
+        {load == true ? null : (
+          <>
+            <div className="details">
+              <div className="heroDetail">
+                <div className="title">
+                  <h2>{heroeDetails?.name.toLocaleUpperCase()}</h2>
+                  <div
+                    className="icons"
+                    onClick={() => {
+                      favoriteHeroeVerification();
+                      setStatusFavoriteHero(!statusFavoriteHero);
+                    }}
+                  >
+                    {statusFavoriteHero == true ? (
+                      <Image
+                        src={'/img/favorito_01.svg'}
+                        height="30px"
+                        width={'30px'}
+                      />
+                    ) : (
+                      <Image
+                        src={'/img/favorito_02.svg'}
+                        height="30px"
+                        width={'30px'}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="description">
+                  <p>{heroeDetails?.description}</p>
+                </div>
+                <div className="stats">
+                  <div className="type">
+                    <h4>Quadrinhos</h4>
+                    <div className="numbers">
+                      <div className="icon">
+                        <Image
+                          src={'/img/ic_quadrinhos.svg'}
+                          width={'36px'}
+                          height={'36px'}
+                        />
+                      </div>
+                      <p> {heroeDetails?.comics?.available}</p>
+                    </div>
+                  </div>
+                  <div className="type">
+                    <h4>Séries</h4>
+                    <div className="numbers">
+                      <div className="icon">
+                        <Image
+                          src={'/img/ic_trailer.svg'}
+                          width={'36px'}
+                          height={'36px'}
+                        />
+                      </div>
+                      <p> {heroeDetails?.series?.available}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="comics">
-                <h4>Séries</h4>
-                <div className="numbers">
-                  <ImFilm className="icon" />
-                  <p> {heroeDetails?.series?.available}</p>
-                </div>
+              <div className="picture">
+                <Image
+                  src={`${heroeDetails?.thumbnail.path}.${heroeDetails?.thumbnail.extension}`}
+                  width={500}
+                  height={500}
+                  style={{ borderBottom: '5px solid red' }}
+                />
               </div>
             </div>
-            <div className="history">
-              <h4>Último quadrinho:</h4>
-            </div>
-          </div>
-          <div className="picture">
-            {heroeDetails == undefined ? null : (
-              <Image
-                src={`${heroeDetails?.thumbnail.path}.${heroeDetails?.thumbnail.extension}`}
-                width={500}
-                height={500}
-                style={{ borderBottom: '5px solid red' }}
-              />
-            )}
-          </div>
-        </div>
+            <Releases url={heroeDetails?.comics?.collectionURI} />
+          </>
+        )}
       </ContainerCentralizer>
     </Box>
   );

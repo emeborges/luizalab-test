@@ -24,7 +24,7 @@ const BoxHero = ({ heroe, favoriteStatus }: Props) => {
     if (!statusFavoriteHero == true) {
       const addHeroeStorage = [...heroesStorage, heroe.id];
       if (addHeroeStorage.length > 5) {
-        return alert('Algo deu errado');
+        return alert('Permitido favoritar no máximo 5 personagens');
       } else {
         localStorage.setItem('HEROE_FAV', JSON.stringify(addHeroeStorage));
         setStatusFavoriteHero(!statusFavoriteHero);
@@ -36,29 +36,41 @@ const BoxHero = ({ heroe, favoriteStatus }: Props) => {
     }
   }
 
-  return (
-    <Link href={`/details/${heroe.id}`}>
-      <Box>
-        <Image
-          src={linkImage}
-          width={300}
-          height={260}
-          style={{ borderBottom: '5px solid red' }}
-        />
+  function heroeSelectStore() {
+    localStorage.setItem('HEROE_SELECTED', `${heroe.id}`);
+  }
 
-        <div className="heroDetails">
-          <p>{heroe.name}</p>
-          <div
-            className="icons"
-            onClick={() => {
-              favoriteHeroeVerification();
-            }}
-          >
-            {statusFavoriteHero == true ? <BsHeartFill /> : <BsHeart />}
-          </div>
+  return (
+    <Box>
+      <Link href={`/details/${heroe.id}`}>
+        <div className="imageBox" onClick={() => heroeSelectStore()}>
+          <Image
+            src={linkImage}
+            width={300}
+            height={260}
+            style={{ borderBottom: '5px solid red' }}
+          />
         </div>
-      </Box>
-    </Link>
+      </Link>
+
+      <div className="heroDetails">
+        <Link href={`/details/${heroe.id}`}>
+          <p onClick={() => heroeSelectStore()}>{heroe.name}</p>
+        </Link>
+        <div
+          className="icons"
+          onClick={() => {
+            favoriteHeroeVerification();
+          }}
+        >
+          {statusFavoriteHero == true ? (
+            <Image src={'/img/favorito_03.svg'} height="15px" width={'15px'} />
+          ) : (
+            <Image src={'/img/favorito_02.svg'} height="15px" width={'15px'} />
+          )}
+        </div>
+      </div>
+    </Box>
   );
 };
 
